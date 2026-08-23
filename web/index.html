@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vanilla Bakery</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Georgia', serif; background: #fdf6ec; color: #4a3728; }
+
+    nav {
+      background: #fff8f0;
+      padding: 18px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      position: sticky; top: 0; z-index: 99;
+    }
+    nav .logo { font-size: 1.6rem; font-weight: bold; color: #c8813a; letter-spacing: 2px; }
+    nav ul { list-style: none; display: flex; gap: 30px; }
+    nav ul li a { text-decoration: none; color: #4a3728; font-size: 0.95rem; transition: color 0.3s; }
+    nav ul li a:hover { color: #c8813a; }
+
+    .hero {
+      background: linear-gradient(135deg, #fdf0dc 0%, #fce4b8 100%);
+      padding: 100px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+    }
+    .hero-text h1 { font-size: 3.2rem; color: #c8813a; line-height: 1.2; margin-bottom: 20px; }
+    .hero-text p { font-size: 1.1rem; color: #7a5c44; max-width: 480px; line-height: 1.8; margin-bottom: 30px; }
+    .btn {
+      background: #c8813a;
+      color: #fff;
+      padding: 14px 36px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s;
+      display: inline-block;
+    }
+    .btn:hover { background: #a8622a; }
+    .hero-img { font-size: 10rem; }
+
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      color: #c8813a;
+      margin-bottom: 10px;
+    }
+    .section-sub {
+      text-align: center;
+      color: #9a7a60;
+      margin-bottom: 50px;
+      font-size: 1rem;
+    }
+
+    .products {
+      padding: 80px 60px;
+      background: #fff8f0;
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 30px;
+    }
+    .card {
+      background: #fdf6ec;
+      border-radius: 16px;
+      padding: 30px 20px;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(200,129,58,0.1);
+      transition: transform 0.3s;
+    }
+    .card:hover { transform: translateY(-6px); }
+    .card .icon { font-size: 3.5rem; margin-bottom: 16px; }
+    .card h3 { font-size: 1.2rem; color: #4a3728; margin-bottom: 8px; }
+    .card p { font-size: 0.9rem; color: #9a7a60; line-height: 1.6; margin-bottom: 14px; }
+    .card .price { font-size: 1.1rem; font-weight: bold; color: #c8813a; }
+
+    .about {
+      padding: 80px 60px;
+      display: flex;
+      align-items: center;
+      gap: 60px;
+      background: linear-gradient(135deg, #fce4b8 0%, #fdf0dc 100%);
+    }
+    .about-img { font-size: 8rem; }
+    .about-text h2 { font-size: 2rem; color: #c8813a; margin-bottom: 16px; }
+    .about-text p { font-size: 1rem; color: #7a5c44; line-height: 1.9; max-width: 500px; }
+
+    .testimonial {
+      padding: 80px 60px;
+      background: #fff8f0;
+      text-align: center;
+    }
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+    .testi-card {
+      background: #fdf6ec;
+      border-radius: 14px;
+      padding: 28px 22px;
+      box-shadow: 0 2px 12px rgba(200,129,58,0.08);
+    }
+    .testi-card p { font-style: italic; color: #7a5c44; line-height: 1.7; margin-bottom: 14px; }
+    .testi-card span { font-weight: bold; color: #c8813a; }
+    .stars { color: #f5a623; font-size: 1.1rem; margin-bottom: 10px; }
+
+    footer {
+      background: #4a3728;
+      color: #fdf6ec;
+      text-align: center;
+      padding: 30px;
+      font-size: 0.9rem;
+    }
+    footer span { color: #c8813a; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">🍰 Vanilla Bakery</div>
+    <ul>
+      <li><a href="#">Beranda</a></li>
+      <li><a href="#produk">Produk</a></li>
+      <li><a href="#tentang">Tentang</a></li>
+      <li><a href="#ulasan">Ulasan</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Kue Vanilla<br>Terbaik Untukmu</h1>
+      <p>Dibuat dengan bahan pilihan dan cinta, setiap gigitan membawa kehangatan dan kelezatan yang tak terlupakan.</p>
+      <a href="#produk" class="btn">Lihat Menu</a>
+    </div>
+    <div class="hero-img">🎂</div>
+  </section>
+
+  <section class="products" id="produk">
+    <h2 class="section-title">Menu Andalan</h2>
+    <p class="section-sub">Pilihan kue vanilla premium kami</p>
+    <div class="product-grid">
+      <div class="card">
+        <div class="icon">🍰</div>
+        <h3>Vanilla Slice</h3>
+        <p>Lapisan krim vanilla lembut dengan biskuit renyah yang memanjakan lidah.</p>
+        <div class="price">Rp 35.000</div>
+      </div>
+      <div class="card">
+        <div class="icon">🎂</div>
+        <h3>Vanilla Birthday Cake</h3>
+        <p>Kue ulang tahun klasik dengan frosting vanilla yang creamy dan manis.</p>
+        <div class="price">Rp 280.000</div>
+      </div>
+      <div class="card">
+        <div class="icon">🧁</div>
+        <h3>Vanilla Cupcake</h3>
+        <p>Cupcake mini dengan topping buttercream vanilla yang cantik dan lezat.</p>
+        <div class="price">Rp 18.000</div>
+      </div>
+      <div class="card">
+        <div class="icon">🍮</div>
+        <h3>Vanilla Pudding</h3>
+        <p>Puding vanilla lembut dengan saus karamel yang menggugah selera.</p>
+        <div class="price">Rp 22.000</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about" id="tentang">
+    <div class="about-img">👩‍🍳</div>
+    <div class="about-text">
+      <h2>Tentang Kami</h2>
+      <p>Vanilla Bakery berdiri sejak 2015 dengan misi menghadirkan kue berkualitas tinggi menggunakan bahan-bahan alami terbaik. Setiap kue kami dibuat dengan penuh kasih sayang oleh tim pastry chef berpengalaman. Kami percaya bahwa kue yang baik adalah kue yang dibuat dengan hati.</p>
+    </div>
+  </section>
+
+  <section class="testimonial" id="ulasan">
+    <h2 class="section-title">Kata Pelanggan</h2>
+    <p class="section-sub">Kepuasan pelanggan adalah prioritas kami</p>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p>"Vanilla Slice-nya enak banget! Krimnya lembut dan tidak terlalu manis. Pasti beli lagi!"</p>
+        <span>— Rina, Jakarta</span>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p>"Pesan birthday cake untuk ulang tahun anak, hasilnya cantik dan rasanya juara. Terima kasih!"</p>
+        <span>— Budi, Bandung</span>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p>"Cupcake vanilla-nya jadi favorit kantor kami. Selalu habis dalam hitungan menit!"</p>
+        <span>— Sari, Surabaya</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2024 <span>Vanilla Bakery</span>. Dibuat dengan 🍰 dan cinta.</p>
+  </footer>
+
+</body>
+</html>

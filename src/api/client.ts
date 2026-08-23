@@ -328,7 +328,10 @@ export async function sendMessage(userText: string, isSystemFollowUp: boolean = 
   let finalError: Error | null = null;
   let successModel = '';
 
+  let spinnerStopped = false;
   const stopSpinner = () => {
+    if (spinnerStopped) return;
+    spinnerStopped = true;
     clearInterval(spinnerTimer);
     process.stdout.write('\x1b[u\x1b[K');
   };

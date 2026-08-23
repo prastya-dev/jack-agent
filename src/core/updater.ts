@@ -5,13 +5,15 @@ import * as os from 'os';
 import { execSync } from 'child_process';
 import { getTheme, A } from '../ui/theme';
 
-const REPO = 'prastya-dev/jckw-agent';
+const REPO = 'prastya-dev/JCKW_AGENT';
+const NPM_PKG = '@prastya-dev/jckw-agent';
 
-function getLatestRelease(): Promise<any> {
+function fetchJson(urlStr: string): Promise<any> {
   return new Promise((resolve, reject) => {
+    const apiUrl = new URL(urlStr);
     const options: https.RequestOptions = {
-      hostname: 'api.github.com',
-      path: `/repos/${REPO}/releases/latest`,
+      hostname: apiUrl.hostname,
+      path: `${apiUrl.pathname}${apiUrl.search}`,
       method: 'GET',
       headers: {
         'User-Agent': 'JCKW-AGENT-Updater'
@@ -22,15 +24,45 @@ function getLatestRelease(): Promise<any> {
       res.on('data', c => data += c);
       res.on('end', () => {
         try {
-          resolve(JSON.parse(data));
+          resolve({ status: res.statusCode || 0, data: JSON.parse(data || '{}') });
         } catch(e) {
           reject(e);
         }
       });
     });
     req.on('error', reject);
+    req.setTimeout(8000, () => { req.destroy(); reject(new Error('Timeout')); });
     req.end();
   });
+}
+
+async function getLatestRelease(): Promise<any> {
+  // 1. Try GitHub Releases API
+  try {
+    const res = await fetchJson(`https://api.github.com/repos/${REPO}/releases/latest`);
+    if (res.status === 200 && res.data?.tag_name) {
+      return res.data;
+    }
+  } catch {}
+
+  // 2. Fallback: Try NPM Registry API
+  try {
+    const res = await fetchJson(`https://registry.npmjs.org/${NPM_PKG}/latest`);
+    if (res.status === 200 && res.data?.version) {
+      return { tag_name: `v${res.data.version}`, assets: [] };
+    }
+  } catch {}
+
+  // 3. Fallback: Try GitHub Tags API
+  try {
+    const res = await fetchJson(`https://api.github.com/repos/${REPO}/tags`);
+    if (res.status === 200 && Array.isArray(res.data) && res.data.length > 0) {
+      const tag = res.data[0].name;
+      if (tag) return { tag_name: tag, assets: [] };
+    }
+  } catch {}
+
+  return {};
 }
 
 function downloadBinary(url: string, dest: string): Promise<void> {
@@ -66,7 +98,7 @@ export async function runUpdate(currentVersion: string): Promise<void> {
   try {
     release = await getLatestRelease();
   } catch (err) {
-    console.error(`\n${t.error}✗ ${isEn ? 'Failed to check for updates from GitHub.' : 'Gagal mengecek pembaruan dari GitHub.'}${t.reset}\n`);
+    console.error(`\n${t.error}✗ ${isEn ? 'Failed to check for updates.' : 'Gagal mengecek pembaruan.'}${t.reset}\n`);
     process.exit(1);
   }
 
@@ -105,16 +137,20 @@ export async function runUpdate(currentVersion: string): Promise<void> {
   const arch = process.arch;
   let assetName = '';
   
-  if (platform === 'linux' && arch === 'x64') assetName = 'jckw-linux';
-  else if (platform === 'darwin' && arch === 'x64') assetName = 'jckw-macos';
-  else if (platform === 'win32' && arch === 'x64') assetName = 'jckw-win.exe';
+  if (platform === 'linux' && arch === 'x64') assetName = 'jckw-linux-x64';
+  else if (platform === 'darwin' && arch === 'x64') assetName = 'jckw-macos-x64';
+  else if (platform === 'win32' && arch === 'x64') assetName = 'jckw-win-x64.exe';
   
   if (!assetName) {
     console.log(`\n${t.error}✗ ${isEn ? 'This OS/architecture does not have an automatic precompiled binary.' : 'Sistem operasi/arsitektur ini tidak memiliki precompiled binary otomatis.'}${t.reset}\n`);
     process.exit(1);
   }
 
-  const asset = release.assets?.find((a: any) => a.name === assetName || a.name === assetName.replace('.exe', '-x64.exe'));
+  const asset = release.assets?.find((a: any) => 
+    a.name === assetName || 
+    a.name === assetName.replace('-x64', '') || 
+    a.name === assetName.replace('-x64.exe', '.exe')
+  );
   if (!asset) {
     console.log(`\n${t.error}✗ ${isEn ? `Release v${latestVersion} does not provide a file for this system.` : `Rilis v${latestVersion} tidak menyediakan file untuk sistem ini.`}${t.reset}\n`);
     process.exit(1);
