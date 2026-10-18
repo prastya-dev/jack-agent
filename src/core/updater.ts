@@ -5,8 +5,8 @@ import * as os from 'os';
 import { execSync } from 'child_process';
 import { getTheme, A } from '../ui/theme';
 
-const REPO = 'prastya-dev/JCKW_AGENT';
-const NPM_PKG = '@prastya-dev/jckw-agent';
+const REPO = 'prastya-dev/JACK_AGENT';
+const NPM_PKG = '@prastya-dev/jack-agent';
 
 function fetchJson(urlStr: string): Promise<any> {
   return new Promise((resolve, reject) => {
@@ -16,7 +16,7 @@ function fetchJson(urlStr: string): Promise<any> {
       path: `${apiUrl.pathname}${apiUrl.search}`,
       method: 'GET',
       headers: {
-        'User-Agent': 'JCKW-AGENT-Updater'
+        'User-Agent': 'JACK-AGENT-Updater'
       }
     };
     const req = https.request(options, (res) => {
@@ -92,7 +92,7 @@ export async function runUpdate(currentVersion: string): Promise<void> {
   } catch {}
 
   const t = getTheme();
-  console.log(`\n${t.accent}${isEn ? 'Checking for JCKW-AGENT updates...' : 'Mengecek pembaruan JCKW-AGENT...'}${t.reset}`);
+  console.log(`\n${t.accent}${isEn ? 'Checking for JACK-AGENT updates...' : 'Mengecek pembaruan JACK-AGENT...'}${t.reset}`);
 
   let release;
   try {
@@ -123,11 +123,11 @@ export async function runUpdate(currentVersion: string): Promise<void> {
   if (isNpm) {
     console.log(`\n${t.accent}${isEn ? 'Updating via NPM...' : 'Memperbarui melalui NPM...'}${t.reset}`);
     try {
-      execSync('npm install -g @prastya-dev/jckw-agent@latest', { stdio: 'inherit' });
+      execSync('npm install -g @prastya-dev/jack-agent@latest', { stdio: 'inherit' });
       console.log(`\n${A.green}✓ ${isEn ? `Successfully updated to v${latestVersion}!` : `Berhasil diperbarui ke v${latestVersion}!`}${t.reset}\n`);
     } catch (err) {
       console.error(`\n${t.error}✗ ${isEn ? 'Failed to update via NPM. Please run manually:' : 'Gagal memperbarui via NPM. Silakan jalankan manual:'}${t.reset}`);
-      console.log(`  npm install -g @prastya-dev/jckw-agent@latest\n`);
+      console.log(`  npm install -g @prastya-dev/jack-agent@latest\n`);
     }
     process.exit(0);
   }
@@ -137,9 +137,9 @@ export async function runUpdate(currentVersion: string): Promise<void> {
   const arch = process.arch;
   let assetName = '';
   
-  if (platform === 'linux' && arch === 'x64') assetName = 'jckw-linux-x64';
-  else if (platform === 'darwin' && arch === 'x64') assetName = 'jckw-macos-x64';
-  else if (platform === 'win32' && arch === 'x64') assetName = 'jckw-win-x64.exe';
+  if (platform === 'linux' && arch === 'x64') assetName = 'jack-linux-x64';
+  else if (platform === 'darwin' && arch === 'x64') assetName = 'jack-macos-x64';
+  else if (platform === 'win32' && arch === 'x64') assetName = 'jack-win-x64.exe';
   
   if (!assetName) {
     console.log(`\n${t.error}✗ ${isEn ? 'This OS/architecture does not have an automatic precompiled binary.' : 'Sistem operasi/arsitektur ini tidak memiliki precompiled binary otomatis.'}${t.reset}\n`);
@@ -156,7 +156,7 @@ export async function runUpdate(currentVersion: string): Promise<void> {
     process.exit(1);
   }
 
-  console.log(`\n${t.accent}${isEn ? `Downloading jckw v${latestVersion}...` : `Mengunduh jckw v${latestVersion}...`}${t.reset}`);
+  console.log(`\n${t.accent}${isEn ? `Downloading jack v${latestVersion}...` : `Mengunduh jack v${latestVersion}...`}${t.reset}`);
   const tmpPath = path.join(os.tmpdir(), assetName + '.tmp');
   const destPath = process.execPath;
 
@@ -180,7 +180,7 @@ export async function runUpdate(currentVersion: string): Promise<void> {
       fs.renameSync(tmpPath, destPath);
     }
     console.log(`\n${A.green}✓ ${isEn ? `Successfully updated to v${latestVersion}!` : `Berhasil diperbarui ke v${latestVersion}!`}${t.reset}`);
-    console.log(`${isEn ? 'Please restart the "jckw" command.' : 'Silakan jalankan ulang perintah "jckw".'}\n`);
+    console.log(`${isEn ? 'Please restart the "jack" command.' : 'Silakan jalankan ulang perintah "jack".'}\n`);
   } catch (err) {
     console.error(`\n${t.error}✗ ${isEn ? 'Failed to replace binary file (may need Admin/Sudo access).' : 'Gagal mengganti file binary (mungkin butuh akses Admin/Sudo).'}${t.reset}`);
     console.error(`${isEn ? 'Please replace the file manually at:' : 'Silakan ganti manual file di:'} ${destPath}\n`);

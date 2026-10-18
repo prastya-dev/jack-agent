@@ -5,7 +5,7 @@ import { OAUTH_TOKEN_URL, TOKEN_REFRESH_BUFFER_MS, APP_OAUTH_CLIENT_ID, APP_OAUT
 import { getTheme } from '../ui/theme';
 
 // ============================================================
-// JCKW-AGENT — Token Manager
+// JACK-AGENT — Token Manager
 // Auto-refresh access_token when approaching expiry
 // ============================================================
 
@@ -28,7 +28,7 @@ export async function refreshAccessToken(): Promise<void> {
   const { refresh_token, client_id, client_secret } = cfg.auth as { refresh_token: string; client_id?: string; client_secret?: string };
 
   if (!refresh_token) {
-    throw new Error('No refresh token available. Re-run "jckw --config" to re-authenticate.');
+    throw new Error('No refresh token available. Re-run "jack --config" to re-authenticate.');
   }
 
   // Gunakan app credentials yang di-embed di binary
@@ -78,7 +78,7 @@ export async function ensureValidToken(): Promise<void> {
     stateManager.update({ config: updated });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
-    throw new Error(`Cannot refresh token: ${msg}\nRun "jckw --config" to re-authenticate.`);
+    throw new Error(`Cannot refresh token: ${msg}\nRun "jack --config" to re-authenticate.`);
   }
 }
 

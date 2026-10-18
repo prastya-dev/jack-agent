@@ -24,7 +24,7 @@ import {
 import * as crypto from 'crypto';
 
 // ============================================================
-// JCKW-AGENT — API Client
+// JACK-AGENT — API Client
 // Handles authenticated requests to Google Antigravity API
 // ============================================================
 
@@ -81,8 +81,8 @@ export async function onboardAntigravity(): Promise<string> {
   if (cfg.environment.antigravity_project_id) {
     let pid: any = cfg.environment.antigravity_project_id;
     if (typeof pid === 'object') {
-      pid = pid.id || pid.name || 'jckw-agent-12345';
-      if (typeof pid === 'object') pid = 'jckw-agent-12345';
+      pid = pid.id || pid.name || 'jack-agent-12345';
+      if (typeof pid === 'object') pid = 'jack-agent-12345';
     }
     return String(pid);
   }
@@ -113,8 +113,8 @@ export async function onboardAntigravity(): Promise<string> {
     }
 
     if (typeof projectId === 'object') {
-       projectId = projectId.id || projectId.name || 'jckw-agent-12345';
-       if (typeof projectId === 'object') projectId = 'jckw-agent-12345';
+       projectId = projectId.id || projectId.name || 'jack-agent-12345';
+       if (typeof projectId === 'object') projectId = 'jack-agent-12345';
     }
 
     if (projectId) {
@@ -124,10 +124,10 @@ export async function onboardAntigravity(): Promise<string> {
     }
     
     // Fallback if API changed but didn't throw
-    return 'jckw-agent-12345';
+    return 'jack-agent-12345';
   } catch (err) {
     // Silently ignore to not disrupt flow; but fallback to a generated ID
-    return 'jckw-agent-error';
+    return 'jack-agent-error';
   }
 }
 

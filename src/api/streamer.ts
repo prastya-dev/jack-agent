@@ -4,7 +4,7 @@ import { TYPEWRITER_DELAY_MS } from '../core/constants';
 import { getTheme } from '../ui/theme';
 
 // ============================================================
-// JCKW-AGENT — SSE Stream Parser + Typewriter Effect
+// JACK-AGENT — SSE Stream Parser + Typewriter Effect
 // Parses Server-Sent Events from Google Antigravity API
 // and renders text with a typewriter character-by-character effect
 // ============================================================

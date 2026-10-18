@@ -7,5 +7,4 @@ binaries/
 *.log
 .DS_Store
 Thumbs.db
-docs/
 update.md

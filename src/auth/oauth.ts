@@ -13,7 +13,7 @@ import {
 } from '../core/constants';
 
 // ============================================================
-// JCKW-AGENT — OAuth2 PKCE Session
+// JACK-AGENT — OAuth2 PKCE Session
 // ============================================================
 
 export interface OAuthTokens {
@@ -305,7 +305,7 @@ export async function runOAuthFlow(): Promise<OAuthTokens> {
 
 function callbackHtml(ok: boolean, errMsg = ''): string {
   if (ok) return `<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8">
-<title>JCKW — Login Success</title>
+<title>JACK — Login Success</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{min-height:100vh;background:#080c10;display:flex;flex-direction:column;
@@ -328,7 +328,7 @@ function callbackHtml(ok: boolean, errMsg = ''): string {
   footer{color:#2a4060;font-size:.72rem;letter-spacing:2px;text-transform:uppercase}
 </style></head><body>
 <div class="card"> <div class="check">✓</div><h1>Login Success!</h1> <p> Please return to the terminal wizard.<div class="chip"><div class="dot"></div>Sesi aktif</div>
-</div><footer>JCKW • prastya-dev</footer>
+</div><footer>JACK • prastya-dev</footer>
 <script>setTimeout(()=>{try{window.close()}catch(e){}},3000)</script>
 </body></html>`;
 

@@ -1,7 +1,7 @@
 import { getTheme } from './theme';
 
 // ============================================================
-// JCKW-AGENT — Model Selector Modal
+// JACK-AGENT — Model Selector Modal
 // Arrow key (↑/↓) navigation + Enter to select, Esc to cancel
 // ============================================================
 

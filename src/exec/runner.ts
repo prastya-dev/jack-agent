@@ -2,7 +2,7 @@ import { exec } from 'child_process';
 import { stateManager } from '../core/state';
 
 // ============================================================
-// JCKW-AGENT — Subprocess Execution Engine
+// JACK-AGENT — Subprocess Execution Engine
 // Runs shell commands and captures stdout/stderr
 // ============================================================
 

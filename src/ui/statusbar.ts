@@ -2,8 +2,8 @@ import { stateManager } from '../core/state';
 import { getTheme, separator } from './theme';
 
 // ============================================================
-// JCKW-AGENT — Dynamic Status Bar
-// Format: JCKW /path/to/dir | model : <model> | mode : <mode>
+// JACK-AGENT — Dynamic Status Bar
+// Format: JACK /path/to/dir | model : <model> | mode : <mode>
 // ============================================================
 
 export function renderStatusBar(): void {
@@ -13,7 +13,7 @@ export function renderStatusBar(): void {
 
   const sep = `${t.separator}${'─'.repeat(cols)}${t.reset}`;
 
-  const dirPart   = `${t.bold}${t.accent}JCKW${t.reset} ${t.dim}${state.currentDir}${t.reset}`;
+  const dirPart   = `${t.bold}${t.accent}JACK${t.reset} ${t.dim}${state.currentDir}${t.reset}`;
   const modelPart = `${t.dim}model${t.reset} ${t.reset}: ${t.accentDim}${state.selectedModel}${t.reset}`;
   const modePart  = `${t.dim}mode${t.reset}  : ${t.accent}${state.activeMode}${t.reset}`;
 
@@ -34,8 +34,8 @@ export function printUserMessage(text: string): void {
   process.stdout.write('\n');
 }
 
-/** Print the "jckw > " bot prefix before streaming */
+/** Print the "jack > " bot prefix before streaming */
 export function printBotPrefix(): void {
   const t = getTheme();
-  process.stdout.write(`${t.botLabel}jckw${t.reset} > `);
+  process.stdout.write(`${t.botLabel}jack${t.reset} > `);
 }

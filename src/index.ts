@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // ============================================================
-// JCKW-AGENT — Main Entry Point
+// JACK-AGENT — Main Entry Point
 // CLI args: (none) | --config | --uninstall | --version
 // ============================================================
 
@@ -22,7 +22,7 @@ import { runUpdate } from './core/updater';
 
 process.on('SIGINT', () => {
   const t = getTheme();
-  process.stdout.write(`\n\n${t.accent}  Goodbye! ${t.dim}— JCKW-AGENT${t.reset}\n\n`);
+  process.stdout.write(`\n\n${t.accent}  Goodbye! ${t.dim}— JACK-AGENT${t.reset}\n\n`);
   process.exit(0);
 });
 
@@ -114,7 +114,7 @@ async function main(): Promise<void> {
 
   // ─ --version / -v ─
   if (args.includes('--version') || args.includes('-v')) {
-    console.log(`JCKW-AGENT v${APP_VERSION}`);
+    console.log(`JACK-AGENT v${APP_VERSION}`);
     process.exit(0);
   }
 
@@ -141,7 +141,7 @@ async function main(): Promise<void> {
   if (args.includes('--config') || args.includes('--wizard')) {
     applyTheme('chat');
     await runRelogin();
-    console.log('\nRestart "jckw" untuk mulai chat.\n');
+    console.log('\nRestart "jack" untuk mulai chat.\n');
     process.exit(0);
   }
 
@@ -150,9 +150,9 @@ async function main(): Promise<void> {
   // Check if first-time setup is needed
   if (!configExists() || !isConfigured()) {
     applyTheme('chat');
-    console.log('\nWelcome to JCKW-AGENT! Let\'s get you set up.\n');
+    console.log('\nWelcome to JACK-AGENT! Let\'s get you set up.\n');
     await runWizard();
-    console.log('\nLaunching JCKW-AGENT...\n');
+    console.log('\nLaunching JACK-AGENT...\n');
   }
 
   // Load configuration

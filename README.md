@@ -1,22 +1,27 @@
 <div align="center">
 
 ```text
- ┏┓┏━╸╻┏ ╻ ╻   ┏━┓┏━╸┏━╸┏┓╻╺┳╸
-  ┃┃  ┣┻┓┃╻┃╺━╸┣━┫┃╺┓┣╸ ┃┗┫ ┃ 
-┗━┛┗━╸╹ ╹┗┻┛   ╹ ╹┗━┛┗━╸╹ ╹ ╹ 
+ ┏┓┏━┓┏━╸╻┏    ┏━┓┏━╸┏━╸┏┓╻╺┳╸
+  ┃┣━┫┃  ┣┻┓   ┣━┫┃╺┓┣╸ ┃┗┫ ┃ 
+┗━┛╹ ╹┗━╸╹ ╹   ╹ ╹┗━┛┗━╸╹ ╹ ╹ 
 ```
 
 **Next-Gen AI CLI Terminal Interface**
 
-[![npm version](https://badge.fury.io/js/@prastya-dev%2Fjckw-agent.svg)](https://badge.fury.io/js/@prastya-dev%2Fjckw-agent)
+[![npm version](https://badge.fury.io/js/@prastya-dev%2Fjack-agent.svg)](https://badge.fury.io/js/@prastya-dev%2Fjack-agent)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Node.js Version](https://img.shields.io/node/v/@prastya-dev/jckw-agent)](https://nodejs.org/)
+[![Node.js Version](https://img.shields.io/node/v/@prastya-dev/jack-agent)](https://nodejs.org/)
 
-JCKW-Agent is a revolutionary terminal-based AI assistant designed specifically for developers and power users. Fully integrated with advanced models from Google Antigravity, JCKW-Agent brings the power of next-generation coding and AI assistance right to your fingertips in the terminal.
+JACK-Agent is a revolutionary terminal-based AI assistant designed specifically for developers and power users. Fully integrated with advanced models from Google Antigravity, JACK-Agent brings the power of next-generation coding and AI assistance right to your fingertips in the terminal.
 
-[Key Features](#-key-features) • [Installation](#-installation) • [Usage](#-usage-guide) • [Contributors](#-contributors)
+[Key Features](#-key-features) • [Installation](#-installation) • [Usage Guide](#-usage-guide) • [Contributors](#-contributors)
 
 </div>
+
+---
+
+> [!IMPORTANT]
+> **Contributing / AI agents:** read [`PRD.md`](PRD.md) and [`TASKS.md`](TASKS.md) **before** touching any code, and read [`AGENTS.md`](AGENTS.md) for the condensed rules. Every completed change must be logged in `TASKS.md`.
 
 ---
 
@@ -29,7 +34,7 @@ JCKW-Agent is a revolutionary terminal-based AI assistant designed specifically 
 - **Smart Authentication (OAuth2):** Secure integrated login system via browser.
 - **Modern TUI (Terminal User Interface):** A beautiful, intuitive, and responsive terminal experience featuring seamless keyboard navigation.
 - **Zero Dependencies:** Available as a standalone binary (Linux, macOS, Windows) requiring absolutely no Node.js installation!
-- **Smart OS Integration:** "Run JCKW Here" feature for lightning-fast access via Windows Context Menu.
+- **Smart OS Integration:** "Run JACK Here" feature for lightning-fast access via Windows Context Menu.
 
 ---
 
@@ -44,16 +49,16 @@ Choose the method that best fits your workflow:
 #### Linux / macOS
 Open your terminal and run the following installation script:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/prastya-dev/JCKW_AGENT/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/prastya-dev/JACK_AGENT/main/scripts/install.sh | bash
 ```
 
 #### Windows (Powershell)
 Open PowerShell **as Administrator**, and run:
 ```powershell
-irm https://raw.githubusercontent.com/prastya-dev/JCKW_AGENT/main/scripts/install.ps1 | iex
+irm https://raw.githubusercontent.com/prastya-dev/JACK_AGENT/main/scripts/install.ps1 | iex
 ```
 > [!NOTE]
-> The Windows installation will automatically add a **"Run JCKW Here"** option when you right-click in File Explorer.
+> The Windows installation will automatically add a **"Run JACK Here"** option when you right-click in File Explorer.
 
 ---
 
@@ -63,26 +68,26 @@ irm https://raw.githubusercontent.com/prastya-dev/JCKW_AGENT/main/scripts/instal
 
 Open your terminal and run:
 ```bash
-npm install -g @prastya-dev/jckw-agent
+npm install -g @prastya-dev/jack-agent
 ```
 
 ---
 
 ## Usage Guide
 
-Starting JCKW-Agent is as easy as calling its name. Open a new terminal and type:
+Starting JACK-Agent is as easy as calling its name. Open a new terminal and type:
 
 ```bash
-jckw
+jack
 ```
 *(Note: Upon first launch, you will be guided through a simple Google account login process).*
 
 ### Launch Flags
 You can instantly jump into a specific mode by appending flags:
-- `jckw -c` → Enter **Chat Mode**
-- `jckw -e` → Enter **Exec Mode**
-- `jckw -q` → Enter **Quiz Mode**
-- `jckw --update` → Check and update to the latest release version automatically.
+- `jack -c` → Enter **Chat Mode**
+- `jack -e` → Enter **Exec Mode**
+- `jack -q` → Enter **Quiz Mode**
+- `jack --update` → Check and update to the latest release version automatically.
 
 ### Slash Commands
 Type these commands directly inside the application's prompt to access various features:
@@ -107,7 +112,7 @@ If you wish to completely remove the application (including the Windows Registry
 
 Run the following command in any terminal:
 ```bash
-jckw --uninstall
+jack --uninstall
 ```
 
 ---
@@ -118,5 +123,5 @@ Crafted with  by **[prastya-dev](https://github.com/prastya-dev)** — _Creator 
 
 ---
 <div align="center">
-  <i>JCKW-Agent is an open-source software licensed under MIT.</i>
+  <i>JACK-Agent is an open-source software licensed under MIT.</i>
 </div>

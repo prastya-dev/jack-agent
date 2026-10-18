@@ -1,15 +1,15 @@
 import { getTheme, separator } from './theme';
 
 // ============================================================
-// JCKW-AGENT — ASCII Banner Renderer
+// JACK-AGENT — ASCII Banner Renderer
 import { APP_VERSION } from '../core/constants';
 
 const ASCII_BANNER = `
- ┏┓┏━╸╻┏ ╻ ╻   ┏━┓┏━╸┏━╸┏┓╻╺┳╸
-  ┃┃  ┣┻┓┃╻┃╺━╸┣━┫┃╺┓┣╸ ┃┗┫ ┃ 
-┗━┛┗━╸╹ ╹┗┻┛   ╹ ╹┗━┛┗━╸╹ ╹ ╹ 
+ ┏┓┏━┓┏━╸╻┏    ┏━┓┏━╸┏━╸┏┓╻╺┳╸
+  ┃┣━┫┃  ┣┻┓   ┣━┫┃╺┓┣╸ ┃┗┫ ┃ 
+┗━┛╹ ╹┗━╸╹ ╹   ╹ ╹┗━┛┗━╸╹ ╹ ╹ 
                   AI CLI [ v${APP_VERSION} ]
-                  https://jckw-agent.dhyy.cloud
+                  https://jack-agent.dhyy.cloud
 `;
 
 /** Renders the full banner with current mode's accent colour */

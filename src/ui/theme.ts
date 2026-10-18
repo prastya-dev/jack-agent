@@ -1,5 +1,5 @@
 // ============================================================
-// JCKW-AGENT — Theme Manager
+// JACK-AGENT — Theme Manager
 // ANSI colour switching: chat = cyan, exec = red, quiz = gold
 // ============================================================
 

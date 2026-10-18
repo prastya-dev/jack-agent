@@ -1,5 +1,5 @@
 // ============================================================
-// JCKW-AGENT — json_exec Block Parser
+// JACK-AGENT — json_exec Block Parser
 // Extracts shell command from AI response in exec mode
 // ============================================================
 

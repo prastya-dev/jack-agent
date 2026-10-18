@@ -1,7 +1,7 @@
 import { getTheme } from './theme';
 
 // ============================================================
-// JCKW-AGENT — Confirmation Dialog
+// JACK-AGENT — Confirmation Dialog
 // Renders:  [?] Jalankan perintah di atas? > [ Ya ]   Tidak
 // Uses raw terminal mode for ← / → key navigation
 // ============================================================

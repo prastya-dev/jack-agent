@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # ============================================================
-# JCKW-AGENT Install Script (Unix — Linux & macOS)
-# Usage: curl -fsSL https://raw.githubusercontent.com/prastya-dev/JCKW_AGENT/main/scripts/install.sh | bash
+# JACK-AGENT Install Script (Unix — Linux & macOS)
+# Usage: curl -fsSL https://raw.githubusercontent.com/prastya-dev/JACK_AGENT/main/scripts/install.sh | bash
 # ============================================================
 
 set -e
 
-REPO="prastya-dev/JCKW_AGENT"
-BIN_NAME="jckw"
+REPO="prastya-dev/JACK_AGENT"
+BIN_NAME="jack"
 INSTALL_DIR="/usr/local/bin"
 CYAN="\033[96m"
 RED="\033[91m"
@@ -17,7 +17,7 @@ RESET="\033[0m"
 
 banner() {
   echo -e "${CYAN}"
-  echo -e "${GRAY}  JCKW-AGENT Installer — by prastya-dev${RESET}\n"
+  echo -e "${GRAY}  JACK-AGENT Installer — by prastya-dev${RESET}\n"
 }
 
 error() {
@@ -71,10 +71,10 @@ get_latest_version() {
 # ── Download Binary ───────────────────────────────────────────
 
 download_binary() {
-  BINARY_URL="https://github.com/${REPO}/releases/download/${VERSION}/jckw-${PLATFORM}-${ARCH_TAG}"
+  BINARY_URL="https://github.com/${REPO}/releases/download/${VERSION}/jack-${PLATFORM}-${ARCH_TAG}"
   TMP_FILE=$(mktemp)
 
-  info "Downloading jckw ${VERSION} for ${PLATFORM}/${ARCH_TAG}..."
+  info "Downloading jack ${VERSION} for ${PLATFORM}/${ARCH_TAG}..."
 
   if command -v curl &>/dev/null; then
     curl -fL --progress-bar "$BINARY_URL" -o "$TMP_FILE" || error "Download failed. URL: $BINARY_URL"
@@ -98,58 +98,58 @@ install_binary() {
     sudo mv "$tmp_file" "${INSTALL_DIR}/${BIN_NAME}"
   fi
 
-  # Linux File Manager Context Menu (Run JCKW Here)
+  # Linux File Manager Context Menu (Run JACK Here)
   if [ "$PLATFORM" = "linux" ]; then
-    info "Setting up 'Run JCKW Here' context menu for Linux..."
+    info "Setting up 'Run JACK Here' context menu for Linux..."
     ICON_DIR="${HOME}/.local/share/icons/hicolor/256x256/apps"
     mkdir -p "$ICON_DIR"
     if command -v curl &>/dev/null; then
-      curl -fsSL "https://raw.githubusercontent.com/${REPO}/main/icon.png" -o "${ICON_DIR}/jckw.png" || true
+      curl -fsSL "https://raw.githubusercontent.com/${REPO}/main/icon.png" -o "${ICON_DIR}/jack.png" || true
     else
-      wget -q "https://raw.githubusercontent.com/${REPO}/main/icon.png" -O "${ICON_DIR}/jckw.png" || true
+      wget -q "https://raw.githubusercontent.com/${REPO}/main/icon.png" -O "${ICON_DIR}/jack.png" || true
     fi
 
     # KDE/Dolphin
     KDE_DIR="${HOME}/.local/share/kio/servicemenus"
     mkdir -p "$KDE_DIR"
-    cat <<EOF > "${KDE_DIR}/jckw.desktop"
+    cat <<EOF > "${KDE_DIR}/jack.desktop"
 [Desktop Entry]
 Type=Service
 ServiceTypes=KonqPopupMenu/Plugin
 MimeType=inode/directory;
-Actions=runJckw;
+Actions=runJack;
 X-KDE-Priority=TopLevel
 
-[Desktop Action runJckw]
-Name=Run JCKW Here
-Icon=jckw
-Exec=konsole --workdir %f -e jckw || gnome-terminal --working-directory=%f -- jckw || xterm -e "cd %f && jckw"
+[Desktop Action runJack]
+Name=Run JACK Here
+Icon=jack
+Exec=konsole --workdir %f -e jack || gnome-terminal --working-directory=%f -- jack || xterm -e "cd %f && jack"
 EOF
 
     # Nautilus/Nemo
     FM_DIR="${HOME}/.local/share/file-manager/actions"
     mkdir -p "$FM_DIR"
-    cat <<EOF > "${FM_DIR}/jckw.desktop"
+    cat <<EOF > "${FM_DIR}/jack.desktop"
 [Desktop Entry]
 Type=Action
-Name=Run JCKW Here
-Icon=jckw
+Name=Run JACK Here
+Icon=jack
 Profiles=profile-zero;
 
 [X-Action-Profile profile-zero]
-Exec=gnome-terminal --working-directory=%f -- jckw || konsole --workdir %f -e jckw || xterm -e "cd %f && jckw"
+Exec=gnome-terminal --working-directory=%f -- jack || konsole --workdir %f -e jack || xterm -e "cd %f && jack"
 Name=Default profile
 EOF
 
     # Application Launcher Shortcut
     APP_DIR="${HOME}/.local/share/applications"
     mkdir -p "$APP_DIR"
-    cat <<EOF > "${APP_DIR}/jckw.desktop"
+    cat <<EOF > "${APP_DIR}/jack.desktop"
 [Desktop Entry]
-Name=JCKW Agent
+Name=JACK Agent
 Comment=AI CLI Terminal Interface
-Exec=jckw
-Icon=jckw
+Exec=jack
+Icon=jack
 Terminal=true
 Type=Application
 Categories=Utility;Development;TerminalEmulator;
@@ -162,7 +162,7 @@ EOF
 try_npm_install() {
   if command -v npm &>/dev/null; then
     info "npm detected. Installing via npm..."
-    npm install -g @prastya-dev/jckw-agent
+    npm install -g @prastya-dev/jack-agent
     success "Installed via npm!"
     return 0
   fi
@@ -238,9 +238,9 @@ main() {
   # Try npm first if available
   if try_npm_install; then
     if [ "$IS_EN" = true ]; then
-      echo -e "\n${CYAN}  Installation complete, please close this tab and try 'jckw' in your terminal!${RESET}\n"
+      echo -e "\n${CYAN}  Installation complete, please close this tab and try 'jack' in your terminal!${RESET}\n"
     else
-      echo -e "\n${CYAN}  Instalasi selesai silahkan close tab ini dan coba di terminal anda jckw${RESET}\n"
+      echo -e "\n${CYAN}  Instalasi selesai silahkan close tab ini dan coba di terminal anda jack${RESET}\n"
     fi
     exit 0
   fi
@@ -251,11 +251,11 @@ main() {
   install_binary "$TMP"
 
   if [ "$IS_EN" = true ]; then
-    success "jckw ${VERSION} installed to ${INSTALL_DIR}/${BIN_NAME}"
-    echo -e "\n${CYAN}  Installation complete, please close this tab and try 'jckw' in your terminal!${RESET}\n"
+    success "jack ${VERSION} installed to ${INSTALL_DIR}/${BIN_NAME}"
+    echo -e "\n${CYAN}  Installation complete, please close this tab and try 'jack' in your terminal!${RESET}\n"
   else
-    success "jckw ${VERSION} berhasil diinstal ke ${INSTALL_DIR}/${BIN_NAME}"
-    echo -e "\n${CYAN}  Instalasi selesai silahkan close tab ini dan coba di terminal anda jckw${RESET}\n"
+    success "jack ${VERSION} berhasil diinstal ke ${INSTALL_DIR}/${BIN_NAME}"
+    echo -e "\n${CYAN}  Instalasi selesai silahkan close tab ini dan coba di terminal anda jack${RESET}\n"
   fi
 }
 

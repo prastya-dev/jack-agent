@@ -6,7 +6,7 @@ import { fetchModels } from '../api/client';
 import { DEFAULT_MODEL } from '../core/constants';
 
 // ============================================================
-// JCKW-AGENT — "Connect Antigravity" Dialog
+// JACK-AGENT — "Connect Antigravity" Dialog
 //
 // Meniru persis UI seperti di foto:
 //  ┌──────────────────────────────────────────┐
@@ -182,7 +182,7 @@ function showSuccessScreen(name: string, email: string): void {
 
  const logo = [
   `  ${A.cyan}╭──────────────────────────────────────────╮${A.reset}`,
-  `  ${A.cyan}│${A.reset}  ${A.bold}${A.blue}J C K W${A.reset} ${A.gray}•${A.reset} ${A.bold}${A.white}A G E N T${A.reset}                     ${A.cyan}│${A.reset}`,
+  `  ${A.cyan}│${A.reset}  ${A.bold}${A.blue}J A C K${A.reset} ${A.gray}•${A.reset} ${A.bold}${A.white}A G E N T${A.reset}                     ${A.cyan}│${A.reset}`,
   `  ${A.cyan}│${A.reset}  ${A.gray}▸ Next-Gen CLI AI Assistant${A.reset}             ${A.cyan}│${A.reset}`,
   `  ${A.cyan}╰──────────────────────────────────────────╯${A.reset}`,
 ];
@@ -220,7 +220,7 @@ export async function runWizard(): Promise<void> {
   process.stdout.write('\x1b[2J\x1b[H');
   const logo = [
   `  ${A.cyan}╭──────────────────────────────────────────╮${A.reset}`,
-  `  ${A.cyan}│${A.reset}  ${A.bold}${A.blue}J C K W${A.reset} ${A.gray}•${A.reset} ${A.bold}${A.white}A G E N T${A.reset}                     ${A.cyan}│${A.reset}`,
+  `  ${A.cyan}│${A.reset}  ${A.bold}${A.blue}J A C K${A.reset} ${A.gray}•${A.reset} ${A.bold}${A.white}A G E N T${A.reset}                     ${A.cyan}│${A.reset}`,
   `  ${A.cyan}│${A.reset}  ${A.gray}▸ Next-Gen CLI AI Assistant${A.reset}             ${A.cyan}│${A.reset}`,
   `  ${A.cyan}╰──────────────────────────────────────────╯${A.reset}`,
 ];
@@ -253,14 +253,14 @@ export async function runWizard(): Promise<void> {
   if (process.platform === 'win32') {
     try {
       const { execSync } = require('child_process');
-      const regBg = 'HKCU\\Software\\Classes\\Directory\\Background\\shell\\JCKW';
-      const regDir = 'HKCU\\Software\\Classes\\Directory\\shell\\JCKW';
+      const regBg = 'HKCU\\Software\\Classes\\Directory\\Background\\shell\\JACK';
+      const regDir = 'HKCU\\Software\\Classes\\Directory\\shell\\JACK';
       
       // Tambahkan registry minimalis sebagai fallback
-      execSync(`reg add "${regBg}" /ve /d "Run JCKW Here" /f > nul 2>&1`, { stdio: 'ignore' });
-      execSync(`reg add "${regBg}\\command" /ve /d "cmd.exe /c start /d \\"%V\\" jckw" /f > nul 2>&1`, { stdio: 'ignore' });
-      execSync(`reg add "${regDir}" /ve /d "Run JCKW Here" /f > nul 2>&1`, { stdio: 'ignore' });
-      execSync(`reg add "${regDir}\\command" /ve /d "cmd.exe /c start /d \\"%1\\" jckw" /f > nul 2>&1`, { stdio: 'ignore' });
+      execSync(`reg add "${regBg}" /ve /d "Run JACK Here" /f > nul 2>&1`, { stdio: 'ignore' });
+      execSync(`reg add "${regBg}\\command" /ve /d "cmd.exe /c start /d \\"%V\\" jack" /f > nul 2>&1`, { stdio: 'ignore' });
+      execSync(`reg add "${regDir}" /ve /d "Run JACK Here" /f > nul 2>&1`, { stdio: 'ignore' });
+      execSync(`reg add "${regDir}\\command" /ve /d "cmd.exe /c start /d \\"%1\\" jack" /f > nul 2>&1`, { stdio: 'ignore' });
     } catch (e) {
       // Abaikan jika gagal
     }
@@ -300,7 +300,7 @@ export async function runWizard(): Promise<void> {
     cfg.environment.project_id = projects[0];
     process.stdout.write(`  ${A.green}✓ ${isEn ? 'Using Project' : 'Menggunakan Project'}: ${A.white}${projects[0]}${A.reset}\n`);
     if (projects.length > 1) {
-      process.stdout.write(`    ${A.gray}(${isEn ? `You have ${projects.length} projects. Edit ~/.config/jckw/config.json to change it` : `Anda memiliki ${projects.length} project. Edit ~/.config/jckw/config.json untuk mengubahnya`})${A.reset}\n`);
+      process.stdout.write(`    ${A.gray}(${isEn ? `You have ${projects.length} projects. Edit ~/.config/jack/config.json to change it` : `Anda memiliki ${projects.length} project. Edit ~/.config/jack/config.json untuk mengubahnya`})${A.reset}\n`);
     }
   } else {
     process.stdout.write(`  ${A.red}⚠ ${isEn ? 'Warning: No Google Cloud Project found!' : 'Peringatan: Tidak ada Google Cloud Project ditemukan!'}${A.reset}\n`);
@@ -342,7 +342,7 @@ export async function runWizard(): Promise<void> {
   const readline = require('readline');
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
   const answer = await new Promise<string>(resolve => {
-    rl.question(`  ${A.cyan}[?]${A.reset} ${A.white}${isEn ? 'Add JCKW to Right-Click Menu & App Launcher? (Y/n)' : 'Tambahkan JCKW ke menu Klik-Kanan & Shortcut Aplikasi? (Y/n)'}${A.reset} `, resolve);
+    rl.question(`  ${A.cyan}[?]${A.reset} ${A.white}${isEn ? 'Add JACK to Right-Click Menu & App Launcher? (Y/n)' : 'Tambahkan JACK ke menu Klik-Kanan & Shortcut Aplikasi? (Y/n)'}${A.reset} `, resolve);
   });
   rl.close();
 
@@ -380,7 +380,7 @@ export async function runUninstall(): Promise<void> {
   } catch {}
 
   console.log('\n' + sep);
-  console.log(`  ${A.cyan}JCKW-AGENT - Uninstall${A.reset}`);
+  console.log(`  ${A.cyan}JACK-AGENT - Uninstall${A.reset}`);
   console.log(sep);
   
   // 1. Delete Config
@@ -398,17 +398,17 @@ export async function runUninstall(): Promise<void> {
   if (isNpm) {
     console.log(`\n  ${A.gray}${isEn ? 'Removing NPM package...' : 'Menghapus dari NPM...'}${A.reset}`);
     try {
-      execSync('npm uninstall -g @prastya-dev/jckw-agent', { stdio: 'ignore' });
+      execSync('npm uninstall -g @prastya-dev/jack-agent', { stdio: 'ignore' });
       console.log(`  ${A.green}✓ ${isEn ? 'NPM package removed.' : 'Paket NPM berhasil dihapus.'}${A.reset}`);
     } catch (err) {
       console.log(`  ${A.red}✗ ${isEn ? 'Failed to remove NPM package automatically.' : 'Gagal menghapus paket NPM otomatis.'}${A.reset}`);
-      console.log(`  ${isEn ? 'Please run:' : 'Silakan jalankan:'} ${A.cyan}npm uninstall -g @prastya-dev/jckw-agent${A.reset}`);
+      console.log(`  ${isEn ? 'Please run:' : 'Silakan jalankan:'} ${A.cyan}npm uninstall -g @prastya-dev/jack-agent${A.reset}`);
     }
     
     if (process.platform === 'win32') {
       try {
-        const regBg = 'HKCU\\Software\\Classes\\Directory\\Background\\shell\\JCKW';
-        const regDir = 'HKCU\\Software\\Classes\\Directory\\shell\\JCKW';
+        const regBg = 'HKCU\\Software\\Classes\\Directory\\Background\\shell\\JACK';
+        const regDir = 'HKCU\\Software\\Classes\\Directory\\shell\\JACK';
         execSync(`reg delete "${regBg}" /f > nul 2>&1`, { stdio: 'ignore' });
         execSync(`reg delete "${regDir}" /f > nul 2>&1`, { stdio: 'ignore' });
       } catch {}
@@ -421,8 +421,8 @@ export async function runUninstall(): Promise<void> {
       if (process.platform === 'win32') {
         // Windows cannot delete running executable directly. We write a small cmd to delete it after exit.
         const cmdPath = destPath + '.del.cmd';
-        const regBg = 'HKCU\\Software\\Classes\\Directory\\Background\\shell\\JCKW';
-        const regDir = 'HKCU\\Software\\Classes\\Directory\\shell\\JCKW';
+        const regBg = 'HKCU\\Software\\Classes\\Directory\\Background\\shell\\JACK';
+        const regDir = 'HKCU\\Software\\Classes\\Directory\\shell\\JACK';
         fs.writeFileSync(cmdPath, `ping 127.0.0.1 -n 3 > nul\nreg delete "${regBg}" /f > nul 2>&1\nreg delete "${regDir}" /f > nul 2>&1\ndel "${destPath}"\ndel "%~f0"`);
         const { spawn } = await import('child_process');
         spawn('cmd.exe', ['/c', cmdPath], { detached: true, stdio: 'ignore' }).unref();

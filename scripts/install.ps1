@@ -1,14 +1,14 @@
 # ============================================================
-# JCKW-AGENT Install Script (Windows - PowerShell - Direct Download)
+# JACK-AGENT Install Script (Windows - PowerShell - Direct Download)
 # ============================================================
 
 try {
-    $Repo = "prastya-dev/JCKW_AGENT"
-    $BinName = "jckw.exe"
-    $InstallDir = "$env:LOCALAPPDATA\jckw"
+    $Repo = "prastya-dev/JACK_AGENT"
+    $BinName = "jack.exe"
+    $InstallDir = "$env:LOCALAPPDATA\jack"
 
     Write-Host ""
-    Write-Host "  JCKW-AGENT Installer" -ForegroundColor Cyan
+    Write-Host "  JACK-AGENT Installer" -ForegroundColor Cyan
     Write-Host "  by prastya-dev" -ForegroundColor DarkGray
     Write-Host ""
     
@@ -73,7 +73,7 @@ try {
 
     # Set User-Agent agar tidak diblokir GitHub API (menghindari error 403)
     $headers = @{
-        "User-Agent" = "JCKW-AGENT-Installer"
+        "User-Agent" = "JACK-AGENT-Installer"
     }
 
     if ($IsEn) { Write-Host "  -> Fetching latest release from GitHub..." -ForegroundColor Cyan }
@@ -84,11 +84,11 @@ try {
     $Version = $response.tag_name
 
     # Direct Link ke versi rilis terbaru
-    $BinaryUrl = "https://github.com/$Repo/releases/latest/download/jckw-win-x64.exe"
+    $BinaryUrl = "https://github.com/$Repo/releases/latest/download/jack-win-x64.exe"
     $TmpPath   = [System.IO.Path]::GetTempFileName() + ".exe"
 
-    if ($IsEn) { Write-Host "  -> Downloading jckw $Version for Windows..." -ForegroundColor Cyan }
-    else { Write-Host "  -> Mengunduh jckw $Version untuk Windows..." -ForegroundColor Cyan }
+    if ($IsEn) { Write-Host "  -> Downloading jack $Version for Windows..." -ForegroundColor Cyan }
+    else { Write-Host "  -> Mengunduh jack $Version untuk Windows..." -ForegroundColor Cyan }
     
     Invoke-WebRequest -Uri $BinaryUrl -OutFile $TmpPath -Headers $headers -UseBasicParsing
 
@@ -110,13 +110,13 @@ try {
         else { Write-Host "  v PATH berhasil diupdate." -ForegroundColor Green }
     }
 
-    # Menambahkan opsi Context Menu (Run JCKW Here)
-    if ($IsEn) { Write-Host "  -> Adding 'Run JCKW Here' to folder context menu..." -ForegroundColor Cyan }
-    else { Write-Host "  -> Menambahkan opsi 'Run JCKW Here' ke klik-kanan folder..." -ForegroundColor Cyan }
+    # Menambahkan opsi Context Menu (Run JACK Here)
+    if ($IsEn) { Write-Host "  -> Adding 'Run JACK Here' to folder context menu..." -ForegroundColor Cyan }
+    else { Write-Host "  -> Menambahkan opsi 'Run JACK Here' ke klik-kanan folder..." -ForegroundColor Cyan }
     
     # Download icon for Context Menu
-    $IconUrl = "https://raw.githubusercontent.com/$Repo/main/jckw.ico"
-    $IconPath = Join-Path $InstallDir "jckw.ico"
+    $IconUrl = "https://raw.githubusercontent.com/$Repo/main/jack.ico"
+    $IconPath = Join-Path $InstallDir "jack.ico"
     try {
         Invoke-WebRequest -Uri $IconUrl -OutFile $IconPath -Headers $headers -UseBasicParsing
     } catch {
@@ -124,21 +124,21 @@ try {
     }
 
     # Buat launcher script agar wt.exe (Windows Terminal) diprioritaskan
-    $LauncherPath = Join-Path $InstallDir "jckw-here.cmd"
-    Set-Content -Path $LauncherPath -Value "@echo off`nwt.exe -d `"%~1`" cmd.exe /k jckw 2>nul || start /d `"%~1`" cmd.exe /k jckw"
+    $LauncherPath = Join-Path $InstallDir "jack-here.cmd"
+    Set-Content -Path $LauncherPath -Value "@echo off`nwt.exe -d `"%~1`" cmd.exe /k jack 2>nul || start /d `"%~1`" cmd.exe /k jack"
 
     # 1. Background File Explorer (Klik kanan di ruang kosong explorer)
-    $RegBgShell = "HKCU:\Software\Classes\Directory\Background\shell\JCKW"
+    $RegBgShell = "HKCU:\Software\Classes\Directory\Background\shell\JACK"
     New-Item -Path $RegBgShell -Force | Out-Null
-    Set-ItemProperty -Path $RegBgShell -Name "(Default)" -Value "Run JCKW Here" -Force
+    Set-ItemProperty -Path $RegBgShell -Name "(Default)" -Value "Run JACK Here" -Force
     Set-ItemProperty -Path $RegBgShell -Name "Icon" -Value "`"$IconPath`"" -Force
     New-Item -Path "$RegBgShell\command" -Force | Out-Null
     Set-ItemProperty -Path "$RegBgShell\command" -Name "(Default)" -Value "`"$LauncherPath`" `"%V`"" -Force
 
     # 2. Directory (Klik kanan pada sebuah folder)
-    $RegDirShell = "HKCU:\Software\Classes\Directory\shell\JCKW"
+    $RegDirShell = "HKCU:\Software\Classes\Directory\shell\JACK"
     New-Item -Path $RegDirShell -Force | Out-Null
-    Set-ItemProperty -Path $RegDirShell -Name "(Default)" -Value "Run JCKW Here" -Force
+    Set-ItemProperty -Path $RegDirShell -Name "(Default)" -Value "Run JACK Here" -Force
     Set-ItemProperty -Path $RegDirShell -Name "Icon" -Value "`"$IconPath`"" -Force
     New-Item -Path "$RegDirShell\command" -Force | Out-Null
     Set-ItemProperty -Path "$RegDirShell\command" -Name "(Default)" -Value "`"$LauncherPath`" `"%1`"" -Force
@@ -146,16 +146,16 @@ try {
     if ($IsEn) { Write-Host "  v Context Menu added successfully." -ForegroundColor Green }
     else { Write-Host "  v Context Menu berhasil ditambahkan." -ForegroundColor Green }
 
-    if ($IsEn) { Write-Host "  v jckw installed successfully to $DestPath" -ForegroundColor Green }
-    else { Write-Host "  v jckw berhasil diinstal ke $DestPath" -ForegroundColor Green }
+    if ($IsEn) { Write-Host "  v jack installed successfully to $DestPath" -ForegroundColor Green }
+    else { Write-Host "  v jack berhasil diinstal ke $DestPath" -ForegroundColor Green }
     
     Write-Host ""
     if ($IsEn) {
         Write-Host "  🎉 INSTALLATION COMPLETE!" -ForegroundColor Green
-        Write-Host "  Installation complete, please close this tab and try 'jckw' in your terminal." -ForegroundColor White
+        Write-Host "  Installation complete, please close this tab and try 'jack' in your terminal." -ForegroundColor White
     } else {
         Write-Host "  🎉 INSTALASI SELESAI!" -ForegroundColor Green
-        Write-Host "  Instalasi selesai silahkan close tab ini dan coba di terminal anda jckw" -ForegroundColor White
+        Write-Host "  Instalasi selesai silahkan close tab ini dan coba di terminal anda jack" -ForegroundColor White
     }
     Write-Host ""
 

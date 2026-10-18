@@ -10,7 +10,7 @@ import { fetchModels } from '../api/client';
 import { FALLBACK_MODELS } from '../core/constants';
 
 // ============================================================
-// JCKW-AGENT — Slash Command Handler
+// JACK-AGENT — Slash Command Handler
 // Handles: /exec, /model, /clear, /exit, /cd, /help
 // ============================================================
 
@@ -152,7 +152,7 @@ function handleToken(): void {
 
 function handleExit(): void {
   const t = getTheme();
-  process.stdout.write(`\n${t.accent}  Goodbye! ${t.dim}— JCKW-AGENT${t.reset}\n\n`);
+  process.stdout.write(`\n${t.accent}  Goodbye! ${t.dim}— JACK-AGENT${t.reset}\n\n`);
   process.exit(0);
 }
 
@@ -199,7 +199,7 @@ function handleHelp(): void {
     ['/token',       'Lihat info kuota pemakaian token'],
     ['/cd <path>',   'Ubah direktori kerja aktif'],
     ['/help',        'Tampilkan bantuan ini'],
-    ['/exit',        'Keluar dari JCKW-AGENT'],
+    ['/exit',        'Keluar dari JACK-AGENT'],
   ];
 
   process.stdout.write('\n' + sep + '\n');

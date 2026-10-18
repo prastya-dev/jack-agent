@@ -1,24 +1,24 @@
 {
-  "name": "@prastya-dev/jckw-agent",
-  "version": "1.1.8",
-  "description": "JCKW-AGENT: AI CLI Terminal Interface by prastya-dev, powered by Google Antigravity",
+  "name": "@prastya-dev/jack-agent",
+  "version": "1.1.9",
+  "description": "JACK-AGENT: AI CLI Terminal Interface by prastya-dev, powered by Google Antigravity",
   "main": "dist/index.js",
   "files": [
     "dist",
-    "jckw.ico",
+    "jack.ico",
     "icon.png"
   ],
   "bin": {
-    "jckw": "dist/index.js"
+    "jack": "dist/index.js"
   },
   "scripts": {
     "build": "tsc",
     "dev": "ts-node src/index.ts",
     "start": "node dist/index.js",
     "clean": "rm -rf dist binaries",
-    "pkg:linux": "pkg dist/index.js --targets node18-linux-x64 --output binaries/jckw-linux-x64 --compress GZip",
-    "pkg:macos": "pkg dist/index.js --targets node18-macos-x64 --output binaries/jckw-macos-x64 --compress GZip",
-    "pkg:win": "pkg dist/index.js --targets node18-win-x64 --output binaries/jckw-win-x64.exe --compress GZip",
+    "pkg:linux": "pkg dist/index.js --targets node18-linux-x64 --output binaries/jack-linux-x64 --compress GZip",
+    "pkg:macos": "pkg dist/index.js --targets node18-macos-x64 --output binaries/jack-macos-x64 --compress GZip",
+    "pkg:win": "pkg dist/index.js --targets node18-win-x64 --output binaries/jack-win-x64.exe --compress GZip",
     "pkg:all": "npm run build && npm run pkg:linux && npm run pkg:macos && npm run pkg:win"
   },
   "keywords": [
@@ -26,14 +26,14 @@
     "cli",
     "terminal",
     "gemini",
-    "jckw",
+    "jack",
     "tui"
   ],
   "author": "prastya-dev",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/prastya-dev/jckw_agent.git"
+    "url": "git+https://github.com/prastya-dev/jack_agent.git"
   },
   "engines": {
     "node": ">=18.0.0"

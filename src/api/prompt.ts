@@ -2,11 +2,11 @@ import * as os from 'os';
 import { stateManager } from '../core/state';
 
 // ============================================================
-// JCKW-AGENT — System Prompt Builder
+// JACK-AGENT — System Prompt Builder
 // Injects runtime environment variables into the prompt template
 // ============================================================
 
-const SYSTEM_PROMPT_TEMPLATE = `Kamu adalah Jckw-agent, AI CLI Yang dikembangkan oleh prastya-dev.
+const SYSTEM_PROMPT_TEMPLATE = `Kamu adalah Jack-agent, AI CLI Yang dikembangkan oleh prastya-dev.
 
 KONTEKS LINGKUNGAN PENGGUNA:
 - Sistem Operasi: {PLATFORM_OS}
@@ -24,7 +24,7 @@ ATURAN PERILAKU:
      \`\`\`json_exec
      { "command": "perintah_terminal_disini" }
      \`\`\`
-     - jangan rekomendasi perintah jckw
+     - jangan rekomendasi perintah jack
 4. Jika mode saat ini adalah 'quiz', jawab dengan SUPER SINGKAT, to the point, tanpa penjelasan, tanpa basa basi. Langsung berikan jawaban intinya saja.`;
 
 /** Detect the current shell from environment variables */

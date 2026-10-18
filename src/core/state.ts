@@ -1,4 +1,4 @@
-import { JckwConfig } from './config';
+import { JackConfig } from './config';
 
 // ── Types ──────────────────────────────────────────────────
 
@@ -9,21 +9,21 @@ export interface ChatMessage {
   commandToExecute?: string;
 }
 
-export interface JckwState {
+export interface JackState {
   currentDir: string;
   activeMode: 'chat' | 'exec' | 'quiz';
   selectedModel: string;
   history: ChatMessage[];
   isStreaming: boolean;
-  config: JckwConfig | null;
+  config: JackConfig | null;
 }
 
-type StateListener = (state: Readonly<JckwState>) => void;
+type StateListener = (state: Readonly<JackState>) => void;
 
 // ── State Manager ──────────────────────────────────────────
 
 class StateManager {
-  private state: JckwState = {
+  private state: JackState = {
     currentDir: process.cwd(),
     activeMode: 'chat',
     selectedModel: 'antigravity-gemini-3-pro',
@@ -35,12 +35,12 @@ class StateManager {
   private listeners: StateListener[] = [];
 
   /** Return a shallow copy of the current state */
-  get(): Readonly<JckwState> {
+  get(): Readonly<JackState> {
     return { ...this.state, history: [...this.state.history] };
   }
 
   /** Merge a partial update into state and notify listeners */
-  update(partial: Partial<JckwState>): void {
+  update(partial: Partial<JackState>): void {
     this.state = { ...this.state, ...partial };
     this.notify();
   }

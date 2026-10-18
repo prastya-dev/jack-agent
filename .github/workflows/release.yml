@@ -47,8 +47,8 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            binaries/jckw-linux-x64
-            binaries/jckw-macos-x64
-            binaries/jckw-win-x64.exe
+            binaries/jack-linux-x64
+            binaries/jack-macos-x64
+            binaries/jack-win-x64.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

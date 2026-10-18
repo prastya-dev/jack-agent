@@ -1,12 +1,12 @@
 // ============================================================
-// JCKW-AGENT — Global Constants
+// JACK-AGENT — Global Constants
 // ============================================================
 
 import pkg from '../../package.json';
 
-export const APP_NAME    = 'JCKW-AGENT';
+export const APP_NAME    = 'JACK-AGENT';
 export const APP_VERSION = pkg.version || '1.0.0';
-export const NPM_PACKAGE = '@prastya-dev/jckw-agent';
+export const NPM_PACKAGE = '@prastya-dev/jack-agent';
 export const DEVELOPER   = 'prastya-dev';
 
 // ── API Endpoints ──────────────────────────────────────────
