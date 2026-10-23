@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # ============================================================
 # JACK-AGENT Install Script (Unix — Linux & macOS)
-# Usage: curl -fsSL https://raw.githubusercontent.com/prastya-dev/JACK_AGENT/main/scripts/install.sh | bash
+# Usage: curl -fsSL https://raw.githubusercontent.com/prastya-dev/jack-agent/main/scripts/install.sh | bash
 # ============================================================
 
 set -e
 
-REPO="prastya-dev/JACK_AGENT"
+REPO="prastya-dev/jack-agent"
 BIN_NAME="jack"
 INSTALL_DIR="/usr/local/bin"
 CYAN="\033[96m"

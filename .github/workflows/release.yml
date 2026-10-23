@@ -39,6 +39,16 @@ jobs:
             echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
           fi
 
+      - name: Verify package.json version matches tag
+        run: |
+          TAG="${{ steps.prep.outputs.tag }}"
+          PKG=$(node -p "require('./package.json').version")
+          if [ "v$PKG" != "$TAG" ]; then
+            echo "::error::Tag $TAG tidak cocok dengan package.json (v$PKG). Samakan dulu sebelum rilis."
+            exit 1
+          fi
+          echo "Versi cocok: $TAG"
+
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
@@ -48,7 +58,9 @@ jobs:
           prerelease: false
           files: |
             binaries/jack-linux-x64
+            binaries/jack-linux-arm64
             binaries/jack-macos-x64
+            binaries/jack-macos-arm64
             binaries/jack-win-x64.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

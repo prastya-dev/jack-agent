@@ -1,6 +1,6 @@
 {
   "name": "@prastya-dev/jack-agent",
-  "version": "1.1.9",
+  "version": "1.2.0",
   "description": "JACK-AGENT: AI CLI Terminal Interface by prastya-dev, powered by Google Antigravity",
   "main": "dist/index.js",
   "files": [
@@ -13,13 +13,16 @@
   },
   "scripts": {
     "build": "tsc",
+    "test": "tsc && node --test dist/*/*.test.js",
     "dev": "ts-node src/index.ts",
     "start": "node dist/index.js",
     "clean": "rm -rf dist binaries",
     "pkg:linux": "pkg dist/index.js --targets node18-linux-x64 --output binaries/jack-linux-x64 --compress GZip",
+    "pkg:linux-arm64": "pkg dist/index.js --targets node18-linux-arm64 --output binaries/jack-linux-arm64 --compress GZip",
     "pkg:macos": "pkg dist/index.js --targets node18-macos-x64 --output binaries/jack-macos-x64 --compress GZip",
+    "pkg:macos-arm64": "pkg dist/index.js --targets node18-macos-arm64 --output binaries/jack-macos-arm64 --compress GZip",
     "pkg:win": "pkg dist/index.js --targets node18-win-x64 --output binaries/jack-win-x64.exe --compress GZip",
-    "pkg:all": "npm run build && npm run pkg:linux && npm run pkg:macos && npm run pkg:win"
+    "pkg:all": "npm run build && npm run pkg:linux && npm run pkg:linux-arm64 && npm run pkg:macos && npm run pkg:macos-arm64 && npm run pkg:win"
   },
   "keywords": [
     "ai",
@@ -33,7 +36,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/prastya-dev/jack_agent.git"
+    "url": "git+https://github.com/prastya-dev/jack-agent.git"
+  },
+  "homepage": "https://github.com/prastya-dev/jack-agent#readme",
+  "bugs": {
+    "url": "https://github.com/prastya-dev/jack-agent/issues"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -52,7 +59,9 @@
     "assets": [],
     "targets": [
       "node18-linux-x64",
+      "node18-linux-arm64",
       "node18-macos-x64",
+      "node18-macos-arm64",
       "node18-win-x64"
     ],
     "outputPath": "binaries"

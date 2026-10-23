@@ -4,12 +4,9 @@
 
 import pkg from '../../package.json';
 
-export const APP_NAME    = 'JACK-AGENT';
-export const APP_VERSION = pkg.version || '1.0.0';
-export const NPM_PACKAGE = '@prastya-dev/jack-agent';
-export const DEVELOPER   = 'prastya-dev';
+export const APP_VERSION = pkg.version || '0.0.0';
 
-// ── API Endpoints ──────────────────────────────────────────
+// ── API Endpoints (khusus provider antigravity) ─────────────
 export const API_BASE            = 'https://daily-cloudcode-pa.googleapis.com';
 export const API_STREAM_ENDPOINT = `${API_BASE}/v1internal:streamGenerateContent?alt=sse`;
 export const API_MODELS_ENDPOINT = `https://cloudcode-pa.googleapis.com/v1internal:fetchAvailableModels`;
@@ -62,14 +59,22 @@ export const GENERATION_CONFIG = {
   maxOutputTokens: 4096,
 };
 
-// ── Default Settings ───────────────────────────────────────
-export const DEFAULT_SETTINGS = {
-  default_model:            DEFAULT_MODEL,
-  default_mode:             'chat' as 'chat' | 'exec' | 'quiz',
-  confirm_danger_commands:  true,
-  max_history_length:       50,
-  language:                 'id' as 'id' | 'en',
-};
+// ── Batas agentik (default; bisa ditimpa config) ───────────
+export const DEFAULT_MAX_STEPS            = 12;
+export const DEFAULT_MAX_OUTPUT_LINES     = 200;
+export const DEFAULT_MAX_OUTPUT_CHARS     = 8000;
+export const DEFAULT_COMPACT_AT_PERCENT   = 70;
+/** Batas konteks cadangan bila provider tidak melaporkan batas modelnya (PRD F7). */
+export const DEFAULT_CONTEXT_TOKENS       = 32000;
 
-// ── Typewriter ─────────────────────────────────────────────
-export const TYPEWRITER_DELAY_MS = 8;
+// ── Timeout jaringan & perintah (wajib eksplisit, PRD § 2.4.2) ──
+export const COMMAND_TIMEOUT_MS     = 30_000;
+export const COMMAND_KILL_GRACE_MS  = 3_000;
+export const COMMAND_MAX_BUFFER     = 10 * 1024 * 1024;
+export const API_TIMEOUT_MS         = 20_000;
+export const STREAM_TIMEOUT_MS      = 180_000;
+
+// ── Skills ─────────────────────────────────────────────────
+export const MAX_SKILLS       = 50;
+export const SKILL_MAX_BYTES  = 8 * 1024;
+export const SKILL_FILE_NAME  = 'SKILL.md';

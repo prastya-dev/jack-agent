@@ -1,49 +1,27 @@
-import { getTheme, separator } from './theme';
+import { getTheme } from './theme';
+import { APP_VERSION } from '../core/constants';
+import { stateSnapshot } from './statusbar';
 
 // ============================================================
-// JACK-AGENT — ASCII Banner Renderer
-import { APP_VERSION } from '../core/constants';
+// JACK-AGENT — Banner & status
+// ============================================================
 
 const ASCII_BANNER = `
  ┏┓┏━┓┏━╸╻┏    ┏━┓┏━╸┏━╸┏┓╻╺┳╸
   ┃┣━┫┃  ┣┻┓   ┣━┫┃╺┓┣╸ ┃┗┫ ┃ 
 ┗━┛╹ ╹┗━╸╹ ╹   ╹ ╹┗━┛┗━╸╹ ╹ ╹ 
                   AI CLI [ v${APP_VERSION} ]
-                  https://jack-agent.dhyy.cloud
 `;
 
-/** Renders the full banner with current mode's accent colour */
 export function renderBanner(): void {
   const t = getTheme();
-  const out: string[] = [];
-
-  out.push('');
-  
-  const lines = ASCII_BANNER.split('\n');
-  for (const line of lines) {
+  const out = [''];
+  for (const line of ASCII_BANNER.split('\n')) {
     if (line.trim() === '') continue;
-    if (line.includes('AI CLI')) {
-       out.push(`${t.dim}${line}${t.reset}`);
-    } else {
-       out.push(`${t.accent}${line}${t.reset}`);
-    }
+    out.push(line.includes('AI CLI') ? `${t.dim}${line}${t.reset}` : `${t.accent}${line}${t.reset}`);
   }
-
-  out.push('');
-  out.push(`${t.dim}  Ketik /help untuk memuat informasi${t.reset}`);
+  out.push(`${t.dim}  ${stateSnapshot()}${t.reset}`);
+  out.push(`${t.dim}  Ketik /help untuk daftar perintah.${t.reset}`);
   out.push('');
   process.stdout.write(out.join('\n') + '\n');
-}
-
-/** Re-renders only the subtitle line (used when mode switches) */
-export function renderModeChange(newMode: 'chat' | 'exec' | 'quiz'): void {
-  const t = getTheme();
-  const cols = process.stdout.columns || 80;
-  const bar = `${t.separator}${'─'.repeat(cols)}${t.reset}`;
-  let modeLabel = 'CHAT MODE';
-  if (newMode === 'exec') modeLabel = 'EXEC MODE';
-  if (newMode === 'quiz') modeLabel = 'QUIZ MODE';
-  console.log(bar);
-  console.log(`${t.accent}  ⟳  Mode switched to: ${t.bold}${modeLabel}${t.reset}`);
-  console.log(bar);
 }

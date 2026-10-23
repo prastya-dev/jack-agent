@@ -1,61 +1,81 @@
-import { exec } from 'child_process';
-import { stateManager } from '../core/state';
+import { spawn } from 'child_process';
+import { COMMAND_TIMEOUT_MS, COMMAND_KILL_GRACE_MS, COMMAND_MAX_BUFFER } from '../core/constants';
 
 // ============================================================
-// JACK-AGENT — Subprocess Execution Engine
-// Runs shell commands and captures stdout/stderr
+// JACK-AGENT — Eksekutor perintah (implementasi di balik
+// pintu tunggal ToolRegistry.run(), PRD § 3.5 / I-9)
 // ============================================================
 
 export interface ExecResult {
   stdout: string;
   stderr: string;
   exitCode: number;
+  timedOut: boolean;
+  overflowed: boolean;
 }
 
-const EXEC_TIMEOUT_MS = 30_000; // 30 seconds max
+function defaultShell(): { shell: string; flag: string } {
+  if (process.platform === 'win32') {
+    return { shell: process.env.COMSPEC || 'cmd.exe', flag: '/c' };
+  }
+  return { shell: process.env.SHELL || '/bin/sh', flag: '-c' };
+}
 
 /**
- * Execute a shell command in the current working directory.
- * Returns stdout, stderr, and exit code.
+ * Jalankan satu perintah shell di cwd. stdin selalu kosong (perintah
+ * interaktif tidak didukung, PRD F4) dan perintah yang mengabaikan
+ * SIGTERM dipaksa mati setelah 3 s.
  */
-export function runCommand(command: string): Promise<ExecResult> {
-  const state = stateManager.get();
-  const cwd = state.currentDir;
+export function runCommand(
+  command: string,
+  cwd: string,
+  timeoutMs: number = COMMAND_TIMEOUT_MS,
+): Promise<ExecResult> {
+  const { shell, flag } = defaultShell();
 
   return new Promise((resolve) => {
-    exec(
-      command,
-      {
-        cwd,
-        timeout: EXEC_TIMEOUT_MS,
-        maxBuffer: 10 * 1024 * 1024, // 10 MB buffer
-        shell: process.platform === 'win32' ? 'cmd.exe' : '/bin/sh',
-      },
-      (error, stdout, stderr) => {
-        const exitCode = error?.code ?? 0;
-        resolve({
-          stdout: stdout.trim(),
-          stderr: stderr.trim(),
-          exitCode: typeof exitCode === 'number' ? exitCode : 0,
-        });
-      },
-    );
+    const child = spawn(shell, [flag, command], { cwd, windowsHide: true });
+    let stdout = '';
+    let stderr = '';
+    let bytes = 0;
+    let timedOut = false;
+    let overflowed = false;
+    let settled = false;
+
+    const cap = (target: 'out' | 'err', chunk: Buffer) => {
+      bytes += chunk.length;
+      if (bytes > COMMAND_MAX_BUFFER) { overflowed = true; return; }
+      if (target === 'out') stdout += chunk.toString('utf8');
+      else stderr += chunk.toString('utf8');
+    };
+
+    child.stdout?.on('data', (c: Buffer) => cap('out', c));
+    child.stderr?.on('data', (c: Buffer) => cap('err', c));
+
+    const killTimer = setTimeout(() => {
+      timedOut = true;
+      child.kill('SIGTERM');
+      setTimeout(() => child.kill('SIGKILL'), COMMAND_KILL_GRACE_MS).unref();
+    }, timeoutMs);
+    killTimer.unref();
+
+    const done = (exitCode: number) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(killTimer);
+      resolve({ stdout, stderr, exitCode, timedOut, overflowed });
+    };
+
+    child.on('error', (err) => {
+      stderr += `${err.message}\n`;
+      done(127);
+    });
+    child.on('close', (code, signal) => {
+      if (timedOut) done(124);
+      else if (code === null) done(signal === 'SIGKILL' ? 137 : 1);
+      else done(code);
+    });
+
+    child.stdin?.end();
   });
-}
-
-/** List of patterns that are considered dangerous */
-const DANGER_PATTERNS: RegExp[] = [
-  /rm\s+-rf\s+[/~]/i,     // rm -rf /... or ~/...
-  /mkfs/i,                  // format disk
-  /dd\s+if=/i,              // disk dump
-  />\s*\/dev\/sd/i,         // write to raw disk
-  /shutdown/i,
-  /reboot/i,
-  /format\s+c:/i,           // Windows format C:
-  /del\s+\/[sq]/i,          // Windows recursive delete
-];
-
-/** Returns true if the command matches a known dangerous pattern */
-export function isDangerousCommand(command: string): boolean {
-  return DANGER_PATTERNS.some((pattern) => pattern.test(command));
 }

@@ -4,9 +4,23 @@ import * as path from 'path';
 import * as os from 'os';
 import { execSync } from 'child_process';
 import { getTheme, A } from '../ui/theme';
+import { askUser } from '../ui/confirm';
 
-const REPO = 'prastya-dev/JACK_AGENT';
+const REPO = 'prastya-dev/jack-agent';
 const NPM_PKG = '@prastya-dev/jack-agent';
+
+/** true kalau `a` lebih baru dari `b` (semver sederhana, prerelease diabaikan). */
+export function isNewer(a: string, b: string): boolean {
+  const parse = (v: string) => v.replace(/^v/i, '').split('.').map(n => parseInt(n, 10) || 0);
+  const pa = parse(a);
+  const pb = parse(b);
+  for (let i = 0; i < 3; i++) {
+    const x = pa[i] ?? 0;
+    const y = pb[i] ?? 0;
+    if (x !== y) return x > y;
+  }
+  return false;
+}
 
 function fetchJson(urlStr: string): Promise<any> {
   return new Promise((resolve, reject) => {
@@ -65,22 +79,54 @@ async function getLatestRelease(): Promise<any> {
   return {};
 }
 
-function downloadBinary(url: string, dest: string): Promise<void> {
+export function downloadBinary(url: string, dest: string, redirects = 0): Promise<void> {
   return new Promise((resolve, reject) => {
-    const file = fs.createWriteStream(dest);
-    https.get(url, (res) => {
-      if (res.statusCode === 301 || res.statusCode === 302) {
-        // Handle redirect
-        return downloadBinary(res.headers.location as string, dest).then(resolve).catch(reject);
+    if (redirects > 5) {
+      reject(new Error('Terlalu banyak redirect'));
+      return;
+    }
+    const req = https.get(url, (res) => {
+      const status = res.statusCode || 0;
+
+      // 301/302/307: ikuti Location (aset GitHub selalu redirect ke CDN).
+      if (status >= 300 && status < 400 && res.headers.location) {
+        res.resume();
+        downloadBinary(new URL(res.headers.location, url).toString(), dest, redirects + 1)
+          .then(resolve, reject);
+        return;
       }
-      res.pipe(file);
-      file.on('finish', () => {
+
+      // Tanpa cek ini, halaman error (HTML 404) akan menimpa binary dengan sampah.
+      if (status !== 200) {
+        res.resume();
+        reject(new Error(`HTTP ${status}`));
+        return;
+      }
+
+      const file = fs.createWriteStream(dest);
+      const gagal = (err: Error) => {
         file.close();
+        fs.unlink(dest, () => reject(err));
+      };
+      res.on('error', gagal);
+      file.on('error', gagal);
+      res.pipe(file);
+      file.on('finish', () => file.close(() => {
+        // Unduhan terpotong (koneksi putus) tidak boleh dipasang.
+        const expected = Number(res.headers['content-length'] ?? 0);
+        try {
+          const actual = fs.statSync(dest).size;
+          if (expected > 0 && actual !== expected) {
+            return fs.unlink(dest, () => reject(new Error(`Ukuran tidak cocok (${actual}/${expected} byte)`)));
+          }
+        } catch (err) {
+          return reject(err as Error);
+        }
         resolve();
-      });
-    }).on('error', (err) => {
-      fs.unlink(dest, () => reject(err));
+      }));
     });
+    req.on('error', reject);
+    req.setTimeout(30_000, () => req.destroy(new Error('Timeout')));
   });
 }
 
@@ -114,20 +160,35 @@ export async function runUpdate(currentVersion: string): Promise<void> {
     process.exit(0);
   }
 
+  // Jangan pernah menurunkan versi: rilis terakhir bisa lebih lama dari build lokal.
+  if (!isNewer(latestVersion, currentVersion)) {
+    console.log(`\n${A.green}✓ ${isEn ? `Your version (v${currentVersion}) is newer than the latest release (v${latestVersion}).` : `Versi Anda (v${currentVersion}) lebih baru dari rilis terakhir (v${latestVersion}).`}${t.reset}\n`);
+    process.exit(0);
+  }
+
   console.log(`${t.dim}${isEn ? 'Latest version:' : 'Versi terbaru:'} v${latestVersion} (${isEn ? 'Currently:' : 'Saat ini:'} v${currentVersion})${t.reset}`);
 
-  // Cek apakah di-install lewat NPM
+  // PRD F10: minta konfirmasi sebelum mengganti binary. Non-TTY menjawab "tidak".
+  const lanjut = await askUser(isEn ? `Update to v${latestVersion} now? (y/n)` : `Perbarui ke v${latestVersion} sekarang? (y/n)`);
+  if (!lanjut) {
+    console.log(`\n${t.dim}${isEn ? 'Update cancelled.' : 'Pembaruan dibatalkan.'}${t.reset}\n`);
+    process.exit(0);
+  }
+
+  // Cek apakah di-install lewat NPM. Satu-satunya penanda yang benar adalah
+  // process.pkg: pengecekan `execPath.includes('node')` juga cocok untuk
+  // binary standalone yang dipasang di path berisi "node".
   // @ts-ignore
-  const isNpm = process.execPath.includes('node') || !process.pkg;
-  
+  const isNpm = !process.pkg;
+
   if (isNpm) {
     console.log(`\n${t.accent}${isEn ? 'Updating via NPM...' : 'Memperbarui melalui NPM...'}${t.reset}`);
     try {
-      execSync('npm install -g @prastya-dev/jack-agent@latest', { stdio: 'inherit' });
+      execSync(`npm install -g ${NPM_PKG}@latest`, { stdio: 'inherit' });
       console.log(`\n${A.green}✓ ${isEn ? `Successfully updated to v${latestVersion}!` : `Berhasil diperbarui ke v${latestVersion}!`}${t.reset}\n`);
     } catch (err) {
       console.error(`\n${t.error}✗ ${isEn ? 'Failed to update via NPM. Please run manually:' : 'Gagal memperbarui via NPM. Silakan jalankan manual:'}${t.reset}`);
-      console.log(`  npm install -g @prastya-dev/jack-agent@latest\n`);
+      console.log(`  npm install -g ${NPM_PKG}@latest\n`);
     }
     process.exit(0);
   }
@@ -138,21 +199,21 @@ export async function runUpdate(currentVersion: string): Promise<void> {
   let assetName = '';
   
   if (platform === 'linux' && arch === 'x64') assetName = 'jack-linux-x64';
+  else if (platform === 'linux' && arch === 'arm64') assetName = 'jack-linux-arm64';
   else if (platform === 'darwin' && arch === 'x64') assetName = 'jack-macos-x64';
+  else if (platform === 'darwin' && arch === 'arm64') assetName = 'jack-macos-arm64';
   else if (platform === 'win32' && arch === 'x64') assetName = 'jack-win-x64.exe';
   
   if (!assetName) {
-    console.log(`\n${t.error}✗ ${isEn ? 'This OS/architecture does not have an automatic precompiled binary.' : 'Sistem operasi/arsitektur ini tidak memiliki precompiled binary otomatis.'}${t.reset}\n`);
+    console.log(`\n${t.error}✗ ${isEn ? 'This OS/architecture does not have an automatic precompiled binary.' : 'Sistem operasi/arsitektur ini tidak memiliki precompiled binary otomatis.'}${t.reset}`);
+    console.log(`  npm install -g ${NPM_PKG}@latest\n`);
     process.exit(1);
   }
 
-  const asset = release.assets?.find((a: any) => 
-    a.name === assetName || 
-    a.name === assetName.replace('-x64', '') || 
-    a.name === assetName.replace('-x64.exe', '.exe')
-  );
+  const asset = release.assets?.find((a: any) => a.name === assetName);
   if (!asset) {
-    console.log(`\n${t.error}✗ ${isEn ? `Release v${latestVersion} does not provide a file for this system.` : `Rilis v${latestVersion} tidak menyediakan file untuk sistem ini.`}${t.reset}\n`);
+    console.log(`\n${t.error}✗ ${isEn ? `Release v${latestVersion} does not provide a file for this system.` : `Rilis v${latestVersion} tidak menyediakan file untuk sistem ini.`}${t.reset}`);
+    console.log(`  npm install -g ${NPM_PKG}@latest\n`);
     process.exit(1);
   }
 
@@ -166,7 +227,9 @@ export async function runUpdate(currentVersion: string): Promise<void> {
       fs.chmodSync(tmpPath, 0o755);
     }
   } catch (err) {
-    console.error(`\n${t.error}✗ ${isEn ? 'Failed to download update.' : 'Gagal mengunduh pembaruan.'}${t.reset}\n`);
+    fs.unlink(tmpPath, () => {});
+    const detail = err instanceof Error ? err.message : String(err);
+    console.error(`\n${t.error}✗ ${isEn ? `Failed to download update (${detail}).` : `Gagal mengunduh pembaruan (${detail}).`}${t.reset}\n`);
     process.exit(1);
   }
 

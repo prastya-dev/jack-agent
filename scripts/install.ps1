@@ -3,7 +3,7 @@
 # ============================================================
 
 try {
-    $Repo = "prastya-dev/JACK_AGENT"
+    $Repo = "prastya-dev/jack-agent"
     $BinName = "jack.exe"
     $InstallDir = "$env:LOCALAPPDATA\jack"
 
